@@ -1,5 +1,3 @@
-// Your JavaScript code moved from the HTML file, with adjustments
-
 // Correct and Incorrect Sounds
 const correctSound = new Audio('correct.mp3');
 const wrongSound = new Audio('wrong.mp3');
@@ -12,8 +10,14 @@ let isPhotoQuiz = false;
 let excelData = {};
 let results = [];
 
-// Load saved data from localStorage
+// Dementia Counter
+let dementiaStartTime = new Date().getTime();
+let dementiaCounterElement = document.getElementById('dementiaCount');
+
 window.addEventListener('DOMContentLoaded', () => {
+    // Update Dementia Counter Every Second
+    setInterval(updateDementiaCounter, 1000);
+
     const savedExcelURL = localStorage.getItem('excelURL');
     if (savedExcelURL) {
         document.getElementById('excelURL').value = savedExcelURL;
@@ -32,6 +36,14 @@ window.addEventListener('DOMContentLoaded', () => {
         updateToggleButtons();
     }
 });
+
+// Update Dementia Counter Function
+function updateDementiaCounter() {
+    let now = new Date().getTime();
+    let elapsedSeconds = Math.floor((now - dementiaStartTime) / 1000);
+    let count = Math.floor(elapsedSeconds / 3);
+    dementiaCounterElement.textContent = count;
+}
 
 // Toggle button event listeners
 document.getElementById('toggleSentences').addEventListener('click', () => {
