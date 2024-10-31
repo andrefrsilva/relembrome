@@ -1,0 +1,252 @@
+/* Body Reset */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Padding */
+.container {
+    padding: 20px;
+}
+
+/* Vanishing Title */
+.vanishing-title {
+    font-size: 4rem;
+    line-height: 1;
+    margin: 0;
+    text-align: center;
+    animation: vanish 6s infinite;
+    color: black;
+}
+
+@keyframes vanish {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+    }
+    40% {
+        opacity: 0;
+        filter: blur(2rem);
+    }
+    60% {
+        opacity: 0;
+        filter: blur(2rem);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+/* Dementia Counter */
+.dementia-counter {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.dementia-counter #dementiaCount {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.dementia-counter .counter-label {
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.dementia-counter .counter-reference {
+    margin-top: 5px;
+}
+
+.dementia-counter .counter-reference a {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Instructions */
+.instructions {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.instructions h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.instructions p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.instructions ol {
+    margin-left: 20px;
+    color: #555;
+}
+
+.instructions ol li {
+    margin-bottom: 10px;
+}
+
+/* Form Controls */
+.form-control {
+    font-size: 16px;
+    margin: 10px 0;
+    padding: 12px;
+    width: calc(100% - 24px);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    margin: 10px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #808080;
+}
+
+/* Toggle Buttons */
+.toggle-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.toggle-button.selected {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+/* Fullscreen Quiz */
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none;
+    z-index: 9999;
+}
+
+.question {
+    font-size: 24px;
+    margin: 20px;
+    color: #333;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.timer, .question-number {
+    font-size: 20px;
+    color: #333;
+}
+
+/* Answer Buttons */
+.answer-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.answer-buttons .btn {
+    flex: 1;
+    margin: 5px;
+    background-color: black;
+    color: white;
+    max-width: 80px;
+}
+
+.answer-buttons .btn:hover {
+    background-color: #333;
+}
+
+#quizImage {
+    max-width: 100%;
+    max-height: 50vh;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+/* Sample Data Buttons */
+.sample-data-buttons .btn {
+    margin: 5px;
+    background-color: black;
+    color: white;
+}
+
+.sample-data-buttons .btn:hover {
+    background-color: #808080;
+}
+
+/* Results Styling */
+#resultsContainer {
+    margin: 50px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+#resultsContainer table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#resultsContainer table, #resultsContainer th, #resultsContainer td {
+    border: 1px solid #ddd;
+}
+
+#resultsContainer th, #resultsContainer td {
+    padding: 12px;
+    text-align: center;
+}
+
+#resultsContainer th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+/* Plot Styling */
+#resultsContainer #plotDiv {
+    width: 100%;
+    max-width: 600px;
+    height: 400px;
+    margin: auto;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    color: #888;
+}
