@@ -2,6 +2,16 @@
 const correctSound = new Audio('correct.mp3');
 const wrongSound = new Audio('wrong.mp3');
 
+const GOOGLE_FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe4SoSBelbY2Sj1qWYzDf0lpCuQZtOHZDP7hXlmxtfr0Giwfw/formResponse';
+
+const ENTRY_ID = 'entry.981422256';
+const ENTRY_RESULT_FIRST_ROUND = 'entry.2021293174';
+const ENTRY_RESULT_SECOND_ROUND = 'entry.396635597';
+const ENTRY_TIME_FIRST_ROUND = 'entry.1537086722';
+const ENTRY_TIME_SECOND_ROUND = 'entry.362684678';
+const ENTRY_WRONG_SENTENCES_FIRST_ROUND = 'entry.1589100333';
+const ENTRY_WRONG_SENTENCES_SECOND_ROUND = 'entry.1907649399';
+
 let questions = [];
 let currentQuestionIndex = 0;
 let startTime;
@@ -14,6 +24,7 @@ let results = [];
 let dementiaStartTime = new Date().getTime();
 let dementiaCounterElement = document.getElementById('dementiaCount');
 
+// Load saved data from localStorage
 window.addEventListener('DOMContentLoaded', () => {
     // Update Dementia Counter Every Second
     setInterval(updateDementiaCounter, 1000);
@@ -35,6 +46,17 @@ window.addEventListener('DOMContentLoaded', () => {
         isPhotoQuiz = savedQuizType === 'photos';
         updateToggleButtons();
     }
+
+    // Load saved player name
+    const savedPlayerName = localStorage.getItem('playerName');
+    if (savedPlayerName) {
+        document.getElementById('playerName').value = savedPlayerName;
+    }
+
+    // Save player name to localStorage when edited
+    document.getElementById('playerName').addEventListener('input', function() {
+        localStorage.setItem('playerName', this.value);
+    });
 });
 
 // Update Dementia Counter Function
@@ -328,8 +350,18 @@ function shuffleArray(array) {
     }
 }
 
+// Modified startSecondRound to avoid starting with the same last question
 function startSecondRound() {
+    const lastQuestionIndex = (currentQuestionIndex - 1) % questions.length;
     shuffleArray(questions); // Shuffle questions for the second round
+
+    // Ensure the first question of the second round is not the same as the last question of the first round
+    if (questions[0] === questions[lastQuestionIndex]) {
+        if (questions.length > 1) {
+            [questions[0], questions[1]] = [questions[1], questions[0]];
+        }
+    }
+
     currentQuestionIndex = questions.length; // Continue counting from the end of the first round
     showQuestion(currentQuestionIndex % questions.length);
 }
@@ -434,6 +466,52 @@ function showResults() {
     const percentageCorrectSecondRound = ((correctSecondRound / questions.length) * 100).toFixed(2); // Calculate percentage
     const timeFirstRound = results.filter(r => r.round === 1).reduce((acc, r) => acc + r.timeTaken, 0) / questions.length;
     const timeSecondRound = results.filter(r => r.round === 2).reduce((acc, r) => acc + r.timeTaken, 0) / questions.length;
+
+    // Collect wrong sentences
+    const wrongSentencesFirstRound = results.filter(r => r.round === 1 && !r.correct).map(r => {
+        if (isPhotoQuiz) {
+            return `Foto de ${questions[r.questionIndex].correctName}`;
+        } else {
+            return questions[r.questionIndex].text;
+        }
+    }).join('; ');
+
+    const wrongSentencesSecondRound = results.filter(r => r.round === 2 && !r.correct).map(r => {
+        if (isPhotoQuiz) {
+            return `Foto de ${questions[r.questionIndex].correctName}`;
+        } else {
+            return questions[r.questionIndex].text;
+        }
+    }).join('; ');
+
+    // Retrieve player name
+    const playerName = localStorage.getItem('playerName') || 'Unknown Player';
+
+    // Prepare form data as URL-encoded string
+    const formData = new URLSearchParams();
+    formData.append(ENTRY_ID, playerName);
+    formData.append(ENTRY_RESULT_FIRST_ROUND, percentageCorrectFirstRound); // Send percentage
+    formData.append(ENTRY_RESULT_SECOND_ROUND, percentageCorrectSecondRound); // Send percentage
+    formData.append(ENTRY_TIME_FIRST_ROUND, timeFirstRound.toFixed(2));
+    formData.append(ENTRY_TIME_SECOND_ROUND, timeSecondRound.toFixed(2));
+    formData.append(ENTRY_WRONG_SENTENCES_FIRST_ROUND, wrongSentencesFirstRound || '-');
+    formData.append(ENTRY_WRONG_SENTENCES_SECOND_ROUND, wrongSentencesSecondRound || '-');
+
+    // Submit data to Google Form
+    fetch(GOOGLE_FORM_ACTION_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Bypasses CORS policy restrictions
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded' // Ensures correct encoding
+        },
+        body: formData.toString() // Converts formData to a URL-encoded string
+    })
+    .then(() => {
+        console.log('Form submitted successfully.');
+    })
+    .catch((error) => {
+        console.error('Error submitting form:', error);
+    });
 
     // Display results
     const summaryTable = document.createElement("table");
